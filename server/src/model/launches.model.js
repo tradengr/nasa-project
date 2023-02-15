@@ -1,6 +1,8 @@
 // creates a map which is a 
 const launches = new Map();
 
+let updatedFlightNumber = 69;
+
 const launch = {
   flightNumber: 69,
   launchDate: new Date('January 5, 2025'),
@@ -23,4 +25,17 @@ function getAllLaunches() {
   return Array.from(launches.values());
 }
 
-module.exports = { getAllLaunches };
+function submitLaunch(launch) {
+  updatedFlightNumber++;
+  launches.set(updatedFlightNumber, Object.assign(launch, {
+    flightNumber: updatedFlightNumber,
+    customer: ['NASA', 'SPACE-X'],
+    upcoming: true,
+    success: true
+  }));
+}
+
+module.exports = { 
+  getAllLaunches,
+  submitLaunch 
+};
