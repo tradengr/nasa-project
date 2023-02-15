@@ -6,7 +6,7 @@ const launch = {
   launchDate: new Date('January 5, 2025'),
   mission: 'Mission Possible',
   rocket: 'Explorer IS1',
-  destination: 'Kepler-442 b',
+  target: 'Kepler-442 b',
   customer: ['NASA', 'SPACE-X'],
   upcoming: true,
   success: true
@@ -16,4 +16,11 @@ const launch = {
 // (launches = {69: launch})
 launches.set(launch.flightNumber, launch);
 
-module.exports = launches;
+// data access function
+function getAllLaunches() {
+  // converts to array of iterables
+  // launches = {69: launch}
+  return Array.from(launches.values());
+}
+
+module.exports = { getAllLaunches };
