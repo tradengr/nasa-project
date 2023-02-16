@@ -9,7 +9,7 @@ const launch = {
   mission: 'Mission Possible',
   rocket: 'Explorer IS1',
   target: 'Kepler-442 b',
-  customer: ['NASA', 'SPACE-X'],
+  customers: ['NASA', 'SPACE-X'],
   upcoming: true,
   success: true
 }
@@ -29,13 +29,26 @@ function submitLaunch(launch) {
   updatedFlightNumber++;
   launches.set(updatedFlightNumber, Object.assign(launch, {
     flightNumber: updatedFlightNumber,
-    customer: ['NASA', 'SPACE-X'],
+    customers: ['NASA', 'SPACE-X'],
     upcoming: true,
     success: true
   }));
 }
 
+function launchIdExists(id) {
+  return launches.has(id);
+}
+
+function abortLaunch(id) {
+  const abortedLaunch = launches.get(id);
+  abortedLaunch.upcoming = false;
+  abortedLaunch.success = false;
+  return abortedLaunch;
+}
+
 module.exports = { 
   getAllLaunches,
-  submitLaunch 
+  submitLaunch,
+  launchIdExists,
+  abortLaunch
 };
