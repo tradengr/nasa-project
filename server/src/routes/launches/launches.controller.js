@@ -14,11 +14,15 @@ function httpGetAllLaunches(req, res) {
 function httpSubmitLaunch(req, res) {
   const launch = req.body;
   if (!launch.launchDate || !launch.mission || !launch.target || !launch.rocket) {
-    return res.status(400).json('Incomplete Launch Data');
+    return res.status(400).json({
+      error: 'Incomplete Launch Data'
+    });
   }
   launch.launchDate = new Date(launch.launchDate);
   if (isNaN(launch.launchDate)) {
-    return res.status(400).json('Invalid Launch Date')
+    return res.status(400).json({
+      error: 'Invalid Launch Date'
+    })
   }
   submitLaunch(launch);
   return res.status(201).json(launch);
