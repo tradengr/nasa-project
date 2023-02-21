@@ -6,12 +6,12 @@ const {
 } = require('../../model/launches.model');
 
 // explicitly name function that works with req res as http functions
-function httpGetAllLaunches(req, res) {
+async function httpGetAllLaunches(req, res) {
   // returns an array of obj launch
-  return res.status(200).json(getAllLaunches())
+  return res.status(200).json(await getAllLaunches())
 }
 
-function httpSubmitLaunch(req, res) {
+async function httpSubmitLaunch(req, res) {
   const launch = req.body;
   if (!launch.launchDate || !launch.mission || !launch.target || !launch.rocket) {
     return res.status(400).json({
@@ -24,7 +24,7 @@ function httpSubmitLaunch(req, res) {
       error: 'Invalid Launch Date'
     })
   }
-  submitLaunch(launch);
+  await submitLaunch(launch);
   return res.status(201).json(launch);
 }
 
