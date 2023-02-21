@@ -1,4 +1,5 @@
 const app = require('../../app');
+const { connectMongo } = require('../../utilities/mongo');
 const request = require('supertest');
 
 const completeLaunchData = {
@@ -21,57 +22,63 @@ const launchDataWithInvalidDate = {
   target: 'Kepler-442 b',
 }
 
-// CREATES A BLOCK THAT GROUPS TOGETHER SEVERAL RELATED TEST
-describe('Test GET /launches', () => {
-  // TEST CASE    
-  test('Respond with 200 SUCCESS', async () => {
-    const response = await request(app)
-      .get('/launches')
-      .expect(200)
-      .expect('Content-Type', /json/)
-  });
-});
-
-describe('Test POST /launches', () => {
-  test('Respond with 201 CREATED', async () => {
-    const response = await request(app)
-      .post('/launches')
-      .send({
-        launchDate: new Date('January 5, 2025'),
-        mission: 'Mission Possible',
-        rocket: 'Explorer IS1',
-        target: 'Kepler-442 b',
-      })
-      .expect('Content-Type', /json/)
-      .expect(201)
-      
-    const launchDateReq = new Date(completeLaunchData.launchDate).valueOf();
-    const launchDateRes = new Date(response.body.launchDate).valueOf();
-    
-    expect(launchDateRes).toBe(launchDateReq);
-    expect(completeLaunchData).toMatchObject(launchDataWithoutDate);
+describe('API TEST', () => {
+  beforeAll(async () => {
+    await connectMongo();
   })
   
-  test('Catch missing required properties', async () => {
-    const response = await request(app)
-      .post('/launches')
-      .send(launchDataWithoutDate)
-      .expect('Content-Type', /json/)
-      .expect(400);
-
-    expect(response.body).toStrictEqual({
-      error: 'Incomplete Launch Data'
+  describe('Test GET /launches', () => {
+    // TEST CASE    
+    test('Respond with 200 SUCCESS', async () => {
+      const response = await request(app)
+        .get('/launches')
+        .expect(200)
+        .expect('Content-Type', /json/)
+    });
+  });
+  
+  describe('Test POST /launches', () => {
+    test('Respond with 201 CREATED', async () => {
+      const response = await request(app)
+        .post('/launches')
+        .send({
+          launchDate: new Date('January 5, 2025'),
+          mission: 'Mission Possible',
+          rocket: 'Explorer IS1',
+          target: 'Kepler-442 b',
+        })
+        .expect('Content-Type', /json/)
+        .expect(201)
+        
+      const launchDateReq = new Date(completeLaunchData.launchDate).valueOf();
+      const launchDateRes = new Date(response.body.launchDate).valueOf();
+      
+      expect(launchDateRes).toBe(launchDateReq);
+      expect(completeLaunchData).toMatchObject(launchDataWithoutDate);
     })
-  })
-  test('Catch invalid Dates', async () => {
-    const response = await request(app)
-      .post('/launches')
-      .send(launchDataWithInvalidDate)
-      .expect('Content-Type', /json/)
-      .expect(400)
-
-    expect(response.body).toStrictEqual({
-      error: 'Invalid Launch Date'
+    
+    test('Catch missing required properties', async () => {
+      const response = await request(app)
+        .post('/launches')
+        .send(launchDataWithoutDate)
+        .expect('Content-Type', /json/)
+        .expect(400);
+  
+      expect(response.body).toStrictEqual({
+        error: 'Incomplete Launch Data'
+      })
     })
-  })
-});
+    test('Catch invalid Dates', async () => {
+      const response = await request(app)
+        .post('/launches')
+        .send(launchDataWithInvalidDate)
+        .expect('Content-Type', /json/)
+        .expect(400)
+  
+      expect(response.body).toStrictEqual({
+        error: 'Invalid Launch Date'
+      })
+    })
+  });
+})
+// CREATES A BLOCK THAT GROUPS TOGETHER SEVERAL RELATED TEST
