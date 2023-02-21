@@ -28,16 +28,25 @@ async function httpSubmitLaunch(req, res) {
   return res.status(201).json(launch);
 }
 
-function httpAbortLaunch(req, res) {
+async function httpAbortLaunch(req, res) {
   const launchId = Number(req.params.id);
 
-  if (!launchIdExists(launchId)) {
+  if (!await launchIdExists(launchId)) {
     return res.status(404).json({
       error: 'Launch ID not found'
     })
   } 
-  const abortedLaunch = abortLaunch(launchId);
-  return res.status(200).json(abortedLaunch);
+  const abortedLaunch = await abortLaunch(launchId);
+
+  if (!abortedLaunch) {
+    return res.json(400).json({
+      err: 'Failed to Abort Launch'
+    });
+  }
+
+  return res.status(200).json({
+    ok: 'Abort Launch Sucess'
+  });
 }
 
 module.exports = {

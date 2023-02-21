@@ -73,25 +73,24 @@ async function submitLaunch(launch) {
   return await createLaunch(completeLaunchInfo);
 }
 
-// function submitLaunch(launch) {
-//   updatedFlightNumber++;
-//   launches.set(updatedFlightNumber, Object.assign(launch, {
-//     flightNumber: updatedFlightNumber,
-//     customers: ['NASA', 'SPACE-X'],
-//     upcoming: true,
-//     success: true
-//   }));
-// }
-
-function launchIdExists(id) {
-  return launches.has(id);
+// checks if the flightID exists 
+async function launchIdExists(id) {
+  // return launches.has(id);
+  return await launchesModel.findOne({
+    flightNumber: id,
+  });
 }
 
-function abortLaunch(id) {
-  const abortedLaunch = launches.get(id);
-  abortedLaunch.upcoming = false;
-  abortedLaunch.success = false;
-  return abortedLaunch;
+// updates the parameter of a document inside launch model
+async function abortLaunch(id) {
+  const aborted = await launchesModel.updateOne({
+    flightNumber: id,
+  }, {
+    upcoming: false,
+    success: false,
+  });
+
+  return aborted.acknowledged === true && aborted.modifiedCount === 1;
 }
 
 
