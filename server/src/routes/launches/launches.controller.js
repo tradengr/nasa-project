@@ -5,10 +5,16 @@ const {
   abortLaunch
 } = require('../../model/launches.model');
 
+const {
+  paginate
+} = require('../../utilities/query');
+
 // explicitly name function that works with req res as http functions
 async function httpGetAllLaunches(req, res) {
   // returns an array of obj launch
-  return res.status(200).json(await getAllLaunches())
+  const { limit, skip } = paginate(req.query);
+  const launches = await getAllLaunches(limit, skip)
+  return res.status(200).json(launches)
 }
 
 async function httpSubmitLaunch(req, res) {
