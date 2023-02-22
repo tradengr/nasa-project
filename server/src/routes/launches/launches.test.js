@@ -22,6 +22,8 @@ const launchDataWithInvalidDate = {
   target: 'Kepler-442 b',
 }
 
+const LAUNCHES_URI = '/v1/launches';
+
 describe('API TEST', () => {
   beforeAll(async () => {
     await connectMongo();
@@ -31,7 +33,7 @@ describe('API TEST', () => {
     // TEST CASE    
     test('Respond with 200 SUCCESS', async () => {
       const response = await request(app)
-        .get('/launches')
+        .get(LAUNCHES_URI)
         .expect(200)
         .expect('Content-Type', /json/)
     });
@@ -40,7 +42,7 @@ describe('API TEST', () => {
   describe('Test POST /launches', () => {
     test('Respond with 201 CREATED', async () => {
       const response = await request(app)
-        .post('/launches')
+        .post(LAUNCHES_URI)
         .send({
           launchDate: new Date('January 5, 2025'),
           mission: 'Mission Possible',
@@ -59,7 +61,7 @@ describe('API TEST', () => {
     
     test('Catch missing required properties', async () => {
       const response = await request(app)
-        .post('/launches')
+        .post(LAUNCHES_URI)
         .send(launchDataWithoutDate)
         .expect('Content-Type', /json/)
         .expect(400);
@@ -70,7 +72,7 @@ describe('API TEST', () => {
     })
     test('Catch invalid Dates', async () => {
       const response = await request(app)
-        .post('/launches')
+        .post(LAUNCHES_URI)
         .send(launchDataWithInvalidDate)
         .expect('Content-Type', /json/)
         .expect(400)
