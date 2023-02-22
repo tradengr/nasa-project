@@ -1,5 +1,5 @@
-const DEFAULT_LIMIT = 50;
-const DEFAULT_PAGE = 0;
+const DEFAULT_LIMIT = 0;
+const DEFAULT_PAGE = 1;
 
 function paginate(query) {
   const limit = Math.abs(query.limit) || DEFAULT_LIMIT;

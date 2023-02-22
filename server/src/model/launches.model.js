@@ -6,19 +6,6 @@ const planetsModel = require('./planets.mongo');
 const DEFAULT_FLIGHT_NUMBER = 1;
 const SPACEX_API_URL = 'https://api.spacexdata.com/v4/launches/query';
 
-// const launch = {
-//   flightNumber: 1, // launch.flight_number
-//   launchDate: new Date('January 5, 2025'), // launch.date_local
-//   mission: 'Mission Possible', // launch.name
-//   rocket: 'Explorer IS1', // launch.rocket.name
-//   target: 'Kepler-442 b', // NA
-//   customers: ['NASA', 'SPACE-X'], // launch.payloads[0].customers
-//   upcoming: true, // launch.upcoming
-//   success: true // launch.success
-// }
-
-// createLaunch(launch);
-
 // selects the latest flight number
 async function getLatestFlightNumber() {
   const latestLaunch = await launchesModel
@@ -119,6 +106,7 @@ async function getAllLaunches(limit, skip) {
       _id: false,
       __v: false,
     })
+    .sort({ flightNumber: 'asc' })
     .limit(limit)
     .skip(skip)
 }
