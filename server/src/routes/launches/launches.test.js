@@ -1,5 +1,7 @@
 const app = require('../../app');
 const { connectMongo } = require('../../utilities/mongo');
+const { loadPlanets } = require('../../model/planets.model');
+
 const request = require('supertest');
 
 const completeLaunchData = {
