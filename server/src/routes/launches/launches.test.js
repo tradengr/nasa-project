@@ -27,6 +27,7 @@ const LAUNCHES_URI = '/v1/launches';
 describe('API TEST', () => {
   beforeAll(async () => {
     await connectMongo();
+    await loadPlanets();
   })
   
   describe('Test GET /launches', () => {
